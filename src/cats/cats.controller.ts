@@ -4,29 +4,38 @@ import {
   Get,
   Header,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Query,
   Redirect,
   Req,
+  UseFilters,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { CatsService } from './cats.service';
 import { Cat } from './interfaces/cat.interface';
+import { ForbiddenException } from 'src/forbidden.exception';
+import { HttpExceptionFilter } from 'src/http-exception.filter';
 
 @Controller('cats')
 export class CatsController {
-  constructor(private catsService: CatsService){}
+  constructor(private catsService: CatsService) {}
 
   @Post()
+  @UseFilters(HttpExceptionFilter)
   async create(@Body() createCatDto: CreateCatDto) {
-    this.catsService.create(createCatDto);
+    //this.catsService.create(createCatDto);
+    throw new ForbiddenException();
   }
 
   @Get()
+  // @UseFilters(HttpExceptionFilter)
   async findAll(): Promise<Cat[]> {
-    return this.catsService.findAll();
+    // return this.catsService.findAll();
+    throw new ForbiddenException();
   }
 
   @Get('docs')

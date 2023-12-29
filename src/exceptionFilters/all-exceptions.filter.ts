@@ -21,13 +21,19 @@ export class AllExceptionsFilter implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    // console.log('All Exception ctx.getRequest : ', ctx.getResponse());
+    const response: any =
+      exception instanceof HttpException
+        ? exception.getResponse()
+        : HttpStatus.INTERNAL_SERVER_ERROR;
 
     const responseBody = {
       statusCode: httpStatus,
       timestamp: new Date().toISOString(),
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
+      message: response.message,
+      error: response.error,
     };
+    console.log('all-exceptions filter');
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
   }

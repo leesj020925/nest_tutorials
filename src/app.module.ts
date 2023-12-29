@@ -9,10 +9,13 @@ import { AppService } from './app.service';
 import { CatsController } from './cats/cats.controller';
 import { CatsService } from './cats/cats.service';
 import { CatsModule } from './cats/cats.module';
-import { LoggerMiddleware, logger } from './logger.middleware';
-import { APP_FILTER } from '@nestjs/core';
-import { HttpExceptionFilter } from './http-exception.filter';
-import { AllExceptionsFilter } from './all-exceptions.filter';
+import { LoggerMiddleware, logger } from './middlewares/logger.middleware';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { HttpExceptionFilter } from './exceptionFilters/http-exception.filter';
+import { AllExceptionsFilter } from './exceptionFilters/all-exceptions.filter';
+import { ValidationPipe } from './pipes/validation.pipe';
+import { RolesGuard } from './guards/roles.guard';
+import { LoggingInterceptor } from './interceptors/logging.interceptor';
 
 @Module({
   imports: [CatsModule],
@@ -26,6 +29,18 @@ import { AllExceptionsFilter } from './all-exceptions.filter';
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
+    },
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
     },
   ],
 })

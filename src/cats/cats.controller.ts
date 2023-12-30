@@ -40,9 +40,10 @@ export class CatsController {
 
   @Post()
   @UseFilters(HttpExceptionFilter)
-  @UsePipes(new JoiValidationPipe(createCatSchema))
+  // @UsePipes(new JoiValidationPipe(createCatSchema))
   @Roles(['admin'])
   async create(@Body(new ValidationPipe()) createCatDto: CreateCatDto) {
+    console.log('createCatDto : ', createCatDto);
     this.catsService.create(createCatDto);
     // throw new ForbiddenException();
   }

@@ -16,9 +16,10 @@ import { AllExceptionsFilter } from './exceptionFilters/all-exceptions.filter';
 import { ValidationPipe } from './pipes/validation.pipe';
 import { RolesGuard } from './guards/roles.guard';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
+import { ConfigModule } from './config/config.module';
 
 @Module({
-  imports: [CatsModule],
+  imports: [CatsModule, ConfigModule.register({folder: './config'})],
   controllers: [AppController],
   providers: [
     AppService,
